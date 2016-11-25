@@ -1,0 +1,28 @@
+.vs
+packages
+bin/
+obj/
+.nuget/
+*.com
+*.class
+*.dll
+*.exe
+*.pdb
+*.dll.config
+*.cache
+*.suo
+######################
+# Logs and databases #
+######################
+*.log
+*.sqlite
+# OS generated files #
+######################
+.DS_Store?
+ehthumbs.db
+Icon?
+Thumbs.db
+# Media files #
+######################
+*.mp3
+*.mp4
