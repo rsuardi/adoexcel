@@ -9,7 +9,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace ADOExcel
-{
+{   
+    //Test Mod Elisardo
     class FileReader<T>
     {
         private static List<T> list = new List<T>();
