@@ -40,24 +40,24 @@ namespace ADOExcel
             }
         }
 
-        public static DataSet SelectWorkingSheet(OleDbConnection conn)
+        public static DataTable SelectWorkingSheet(OleDbConnection conn, string sheet, string rangeExcel = null)
         {
             try
             {
-                OleDbCommand command = new OleDbCommand("Select * from [Sheet1$]", conn);
+                OleDbCommand command = new OleDbCommand("Select * from [" + sheet + "$" + rangeExcel + "]", conn);
                 OleDbDataAdapter adpt = new OleDbDataAdapter(command);
                 DataSet ds1 = new DataSet();
                 adpt.Fill(ds1);
-                OleDbDataReader reader = command.ExecuteReader();
+                command.ExecuteReader();
                 conn.Close();
+                DataTable table = ds1.Tables[0];
                 return ds1;
             }
             catch (Exception ex)
             {
-
-                throw new ArgumentException("Verify if the Sheet name in the file is [Sheet1]");
+                return null;
             }
-        }
+        
 
         
         
