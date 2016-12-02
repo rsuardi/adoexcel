@@ -56,7 +56,7 @@ namespace ADOExcel
                 command.ExecuteReader();
                 conn.Close();
                 DataTable table = ds1.Tables[0];
-                return ds1;
+                return table;
             }
             catch (Exception ex)
             {
