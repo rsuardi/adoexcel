@@ -54,9 +54,17 @@ namespace ADOExcel
                     if (int.TryParse(sheet, out isheet))
                     {
                         DataTable dtSchema = conn.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, new object[] { null, null, null, "TABLE" });
+                        try
+                        {
                         string Sheet1 = dtSchema.Rows[isheet].Field<string>("TABLE_NAME");
                         Sheet1 = Sheet1.Replace("'", "");
-                        FROM =  Sheet1 + rangeExcel;
+                        FROM = Sheet1 + rangeExcel;
+                        }
+                        catch
+                        {
+                            FROM = sheet + "$" + rangeExcel;
+                        }
+                        
                     }
                     else
                         FROM = sheet + "$" + rangeExcel;
