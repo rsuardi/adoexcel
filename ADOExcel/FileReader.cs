@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.OleDb;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Data;
+using System.Reflection;
 
 namespace ADOExcel
 {   
@@ -47,21 +45,37 @@ namespace ADOExcel
 
         public static DataTable SelectWorkingSheet(OleDbConnection conn, string sheet, string rangeExcel = null)
         {
-            try
-            {
-                OleDbCommand command = new OleDbCommand("Select * from [" + sheet + "$" + rangeExcel + "]", conn);
-                OleDbDataAdapter adpt = new OleDbDataAdapter(command);
-                DataSet ds1 = new DataSet();
-                adpt.Fill(ds1);
-                command.ExecuteReader();
-                conn.Close();
-                DataTable table = ds1.Tables[0];
-                return table;
-            }
-            catch (Exception ex)
-            {
-                return null;
-            }   
+            string FROM;
+            int isheet;
+                
+                try
+                {
+
+                    if (int.TryParse(sheet, out isheet))
+                    {
+                        DataTable dtSchema = conn.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, new object[] { null, null, null, "TABLE" });
+                        string Sheet1 = dtSchema.Rows[isheet].Field<string>("TABLE_NAME");
+                        Sheet1 = Sheet1.Replace("'", "");
+                        FROM =  Sheet1 + rangeExcel;
+                    }
+                    else
+                        FROM = sheet + "$" + rangeExcel;
+                    
+
+                    OleDbCommand command = new OleDbCommand("Select * from [" + FROM + "]",conn);
+                    OleDbDataAdapter adpt = new OleDbDataAdapter(command);
+                    DataSet ds1 = new DataSet();
+                    adpt.Fill(ds1);
+                    
+                    command.ExecuteReader();
+                    conn.Close();
+                    DataTable table = ds1.Tables[0];
+                    return table;
+                }
+                catch (Exception ex)
+                {
+                  return null;
+                }
         }
 
         public static List<T> findList<T>(DataTable data) where T : new ()
